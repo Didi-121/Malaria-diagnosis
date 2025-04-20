@@ -1,8 +1,8 @@
 %Didier Aguilar
 
-positive_plate_width = 8; negative_plate_width=4;
-space = 50;
-d_between_plates = 0.5;
+positive_plate_width = 20; negative_plate_width=10;
+space = 30;
+d_between_plates = 1;
 
 charges_quantity=20; 
 Q=1000; individual_charge = Q/charges_quantity; ke= 9e9; 
@@ -16,7 +16,7 @@ positive_x_positions= linspace(-positive_plate_width/2, ...
 negative_x_positions= linspace(-negative_plate_width/2 ...
     ,negative_plate_width /2,charges_quantity);
 %variables use to create a vector with the y positions
-create_parabola = @(x,a,c) a .* x.^2  +  c ;
+create_parabola = @(x,a,c) a .* x.^2 + c ;
 positive_y_positions = create_parabola(positive_x_positions, 1, ...
     d_between_plates / 2);
 negative_y_positions = create_parabola(negative_x_positions, -4, ...
@@ -25,6 +25,7 @@ negative_y_positions = create_parabola(negative_x_positions, -4, ...
 
 hold on 
 grid on
+disp(charges_quantity)
 for i=1:charges_quantity
     disp(i)
     plot(positive_x_positions(i),positive_y_positions(i), "rs", "LineWidth",3)
