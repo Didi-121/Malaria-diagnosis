@@ -2,36 +2,35 @@
 %Lenin Garnica
 %Albert Constantino
 %Mauricio Rodriguez
+clear
+clc
+clf
 
-positive_plate_width = 8; negative_plate_width=4;
-space = 50;
-d_between_plates = 0.5;
+positive_plate_width = 8; negative_plate_width = 4;
+space = 50; d_between_plates = 8;
 
-charges_quantity=20; 
-Q=1000; individual_charge = Q/charges_quantity; ke= 9e9; 
+charges_quantity = 20;
+Q = 1000; individual_charge = Q / charges_quantity;
+ke = 9e9;
 
-points_in_space=50;
-x = linspace(-space,space,points_in_space);
-y = linspace(-space,space,points_in_space);
+points_in_space = 50;
+x = linspace(-space, space, points_in_space);
+y = linspace(-space, space, points_in_space);
 
-positive_x_positions= linspace(-positive_plate_width/2, ...
-    positive_plate_width/2, charges_quantity);
-negative_x_positions= linspace(-negative_plate_width/2 ...
-    ,negative_plate_width /2,charges_quantity);
-%variables use to create a vector with the y positions
-create_parabola = @(x,a,c) a .* x.^2  +  c ;
-positive_y_positions = create_parabola(positive_x_positions, 1, ...
-    d_between_plates / 2);
-negative_y_positions = create_parabola(negative_x_positions, -4, ...
-    -d_between_plates / 2);
+positive_x_positions = linspace(-positive_plate_width/2, positive_plate_width/2, charges_quantity);
+negative_x_positions = linspace(-negative_plate_width/2, negative_plate_width/2, charges_quantity);
 
+create_parabola = @(x,a,c) a .* x.^2 + c;
+positive_y_positions = create_parabola(positive_x_positions, -2, d_between_plates/2);
+negative_y_positions = create_parabola(negative_x_positions, -3, -d_between_plates/2);
 
-hold on 
-grid on
-for i=1:charges_quantity
-    plot(positive_x_positions(i),positive_y_positions(i), "rs", "LineWidth",3)
-    plot(negative_x_positions(i),negative_y_positions(i), "bs", "LineWidth",3)
+figure;
+hold on;
+for i = 1:charges_quantity
+    plot(positive_x_positions(i), positive_y_positions(i), "rs", "LineWidth", 3)
+    plot(negative_x_positions(i), negative_y_positions(i), "bs", "LineWidth", 3)
 end
+hold off;
 
 %Potencial
 V = zeros(points_in_space, points_in_space); % matriz del potencial
@@ -56,7 +55,7 @@ for i = 1:charges_quantity
             V(ix, iy) = V(ix, iy) - ke * individual_charge / rn;
         end
     end
-end
+    end
 [X, Y] = meshgrid(x, y); % Malla para graficar
 
 figure
