@@ -2,35 +2,29 @@
 %Lenin Garnica
 %Albert Constantino
 %Mauricio Rodriguez
-clear
-clc
-clf
 
-positive_plate_width = 8; negative_plate_width = 4;
-space = 50; d_between_plates = 8;
-
-charges_quantity = 20;
-Q = 1000; individual_charge = Q / charges_quantity;
-ke = 9e9;
+positive_plate_width = 16; negative_plate_width = 10;
+space = 10; 
+d_between_plates = 1; charges_quantity = 50;
+Q = 1000; individual_charge = Q / charges_quantity; ke = 9e9;
 
 points_in_space = 50;
 x = linspace(-space, space, points_in_space);
-y = linspace(-space, space, points_in_space);
+y = linspace(-space,1, points_in_space);
 
 positive_x_positions = linspace(-positive_plate_width/2, positive_plate_width/2, charges_quantity);
 negative_x_positions = linspace(-negative_plate_width/2, negative_plate_width/2, charges_quantity);
 
 create_parabola = @(x,a,c) a .* x.^2 + c;
-positive_y_positions = create_parabola(positive_x_positions, -2, d_between_plates/2);
-negative_y_positions = create_parabola(negative_x_positions, -3, -d_between_plates/2);
+positive_y_positions = create_parabola(positive_x_positions, -1/7, 0);
+negative_y_positions = create_parabola(negative_x_positions, -1/3, -d_between_plates);
 
 figure;
 hold on;
-for i = 1:charges_quantity
-    plot(positive_x_positions(i), positive_y_positions(i), "rs", "LineWidth", 3)
-    plot(negative_x_positions(i), negative_y_positions(i), "bs", "LineWidth", 3)
-end
-hold off;
+plot(positive_x_positions, positive_y_positions, "rs", "LineWidth", 3)
+plot(negative_x_positions, negative_y_positions, "bs", "LineWidth", 3)
+axis( [x(1) x(end) y(1) y(end)] )
+hold off; 
 
 %Potencial
 V = zeros(points_in_space, points_in_space); % matriz del potencial
@@ -55,7 +49,7 @@ for i = 1:charges_quantity
             V(ix, iy) = V(ix, iy) - ke * individual_charge / rn;
         end
     end
-    end
+end
 [X, Y] = meshgrid(x, y); % Malla para graficar
 
 figure
@@ -66,8 +60,12 @@ colorbar
 title('Potencial eléctrico')
 xlabel('x')
 ylabel('y')
+xlim([-space space])
+ylim([-space 0])
+hold on
+plot(positive_x_positions, positive_y_positions, "ks", "LineWidth", 3)
+plot(negative_x_positions, negative_y_positions, "ws", "LineWidth", 3)
 
-hold off
 % equipotenciales y campo
 % Reutilizamos V y [X, Y] calculados en la parte de potencial
 figure
@@ -87,3 +85,4 @@ streamslice(X, Y, Ex, Ey, 1, 'color', 'g'); % Líneas de flujo verdes
 title('Líneas equipotenciales y Campo Eléctrico');
 xlabel('x'); ylabel('y');
 hold off;
+
